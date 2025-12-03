@@ -24,6 +24,13 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always
+          volumeMounts:
+          - name: ephemeral
+            mountPath: "/nexus-data"
+      volumes:
+        - name: ephemeral
+          emptyDir:
+            sizeLimit: 5Gi
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -31,13 +38,6 @@ spec:
       serviceAccount: ocp-test-kb
       securityContext: {}
       schedulerName: default-scheduler
-    volumeMounts:
-    - name: ephemeral
-      mountPath: "/nexus-data"
-  volumes:
-    - name: ephemeral
-      emptyDir:
-        sizeLimit: 5Gi
   strategy:
     type: RollingUpdate
     rollingUpdate:
