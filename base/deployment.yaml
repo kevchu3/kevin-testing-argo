@@ -31,6 +31,13 @@ spec:
       serviceAccount: ocp-test-kb
       securityContext: {}
       schedulerName: default-scheduler
+    volumeMounts:
+    - name: ephemeral
+      mountPath: "/nexus-data"
+  volumes:
+    - name: ephemeral
+      emptyDir:
+        sizeLimit: 5Gi
   strategy:
     type: RollingUpdate
     rollingUpdate:
