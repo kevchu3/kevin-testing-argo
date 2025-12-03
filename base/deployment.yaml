@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ocp-test-kb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ocp-test-kb
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ocp-test-kb
+    spec:
+      containers:
+        - name: container
+          image: 'image-registry.openshift-image-registry.svc:5000/ocp-test-kb-dev/ocp-testing-kb:dev-c81db6566e01d4d8fea6350b760996843741c7a2'
+          ports:
+            #- containerPort: 5000
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: ocp-test-kb
+      serviceAccount: ocp-test-kb
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
